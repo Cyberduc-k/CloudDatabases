@@ -1,3 +1,4 @@
+using API.Middleware;
 using Data;
 using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,9 @@ using Service.Interfaces;
 using Service.Mapping;
 
 IHost host = new HostBuilder()
-    .ConfigureFunctionsWorkerDefaults()
+    .ConfigureFunctionsWorkerDefaults(worker => {
+        worker.UseMiddleware<ExceptionMiddleware>();
+    })
     .ConfigureServices((ctx, services) => {
         string connectionString = Environment.GetEnvironmentVariable("DefaultConnection")!;
 
